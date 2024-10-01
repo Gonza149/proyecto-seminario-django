@@ -11,3 +11,6 @@ def index(request):
         "nacionalidad": "Argentino"
     }
     return render(request, 'index.html', context)
+
+def contador(request):
+    return render(request, 'contador.html')
