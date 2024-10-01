@@ -1,10 +1,15 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-
+from django.http import HttpResponse 
+from .models import Feature
 # Create your views here.
 
 def index(request):
     
+    
+
+
+
+
     context = {
         "nombre": "Francisco",
         "edad": 44,
@@ -12,5 +17,9 @@ def index(request):
     }
     return render(request, 'index.html', context)
 
+
 def contador(request):
-    return render(request, 'contador.html')
+
+    palabras = request.POST['text'].split()
+    cantidadPalabras = len(palabras)
+    return render(request, 'contador.html', {"cantidad": cantidadPalabras})
