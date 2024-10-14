@@ -2,9 +2,8 @@ from django.db import models
 
 # Create your models here.
 
-class Feature:
-    id: int
-    nombre: str
-    descripcion: str
+class Feature(models.Model):
+    nombre = models.CharField(max_length=20)
+    descripcion = models.CharField(max_length=100)
     
 

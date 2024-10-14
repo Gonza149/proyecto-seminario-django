@@ -1,22 +1,19 @@
 from django.shortcuts import render
 from django.http import HttpResponse 
 from .models import Feature
+
+from .forms import FeatureForm
 # Create your views here.
 
 def index(request):
-    
-    
+    context = {}
+    formulario = FeatureForm()
+    features = Feature.objects.all()
 
+    context['features'] = features
+    context['formulario'] = formulario
 
-
-
-    context = {
-        "nombre": "Francisco",
-        "edad": 44,
-        "nacionalidad": "Argentino"
-    }
     return render(request, 'index.html', context)
-
 
 def contador(request):
 

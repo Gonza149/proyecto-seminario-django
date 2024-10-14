@@ -2,11 +2,25 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'style.css' %}">
 
-<h1>Ingrese texto: </h1>
 
-<form method="post" action="contador">
-    
-    {% csrf_token %}
-    <textarea name="text" rows="10" cols="50"> </textarea><br>
-    <input type="submit">
-</form>
+<table>
+<tr><th>Nombre</th><th>Descripcion</th><th>Acción</th></tr>
+<tr>
+    {% for field in formulario %}
+    <td>{{field}}</td>
+    {% endfor%}
+    <td><button name="guardar">Guardar</button></td>
+</tr>
+
+
+{% for feature in features %}
+<tr>
+<td>{{feature.nombre}}</td>
+<td>{{feature.descripcion}}</td>
+<td>
+    <button name="editar">Editar</button>
+    <button name="borrar">Borrar</button>
+</td>
+</tr>
+{% endfor %}
+</table>
