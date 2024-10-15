@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.http import HttpResponse 
+from django.shortcuts import render # type: ignore
+from django.http import HttpResponse  # type: ignore
 from .models import Feature
 
 from .forms import FeatureForm
@@ -12,6 +12,11 @@ def index(request):
 
     context['features'] = features
     context['formulario'] = formulario
+
+    if request.method == 'POST':
+        if 'guardar' in request.POST:
+            form = FeatureForm(request.POST)
+            form.save()
 
     return render(request, 'index.html', context)
 
