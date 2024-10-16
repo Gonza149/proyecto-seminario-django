@@ -11,12 +11,34 @@ def index(request):
     features = Feature.objects.all()
 
     context['features'] = features
-    context['formulario'] = formulario
 
     if request.method == 'POST':
         if 'guardar' in request.POST:
-            form = FeatureForm(request.POST)
-            form.save()
+            identificador = request.POST.get('guardar')
+            
+            if not identificador:
+                formulario = FeatureForm(request.POST)
+                
+            else:
+                feature = Feature.objects.get(id=identificador)
+                formulario = FeatureForm(request.POST, instance=feature)
+                
+
+            formulario.save()
+            formulario = FeatureForm()
+
+        elif 'borrar' in request.POST:
+            identificador = request.POST.get('borrar')
+            feature = Feature.objects.get(id=identificador)
+            feature.delete()
+
+        elif 'editar' in request.POST:
+            identificador = request.POST.get('editar')
+            feature = Feature.objects.get(id=identificador)
+
+            formulario = FeatureForm(instance=feature)
+
+    context['formulario'] = formulario
 
     return render(request, 'index.html', context)
 

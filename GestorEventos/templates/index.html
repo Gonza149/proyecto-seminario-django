@@ -7,22 +7,24 @@
 
     <table>
     <tr><th>Nombre</th><th>Descripcion</th><th>Acción</th></tr>
+    {% if not formulario.instance.id %}
     <tr>
-        {% for field in formulario %}
-        <td>{{field}}</td>
-        {% endfor%}
-        <td><button name="guardar">Guardar</button></td>
+        {% include 'guardar.html' %}
     </tr>
-
+    {% endif %}
 
     {% for feature in features %}
     <tr>
+        {% if formulario.instance.id == feature.id %}
+        {% include 'guardar.html' %}
+        {% else %}
         <td>{{feature.nombre}}</td>
         <td>{{feature.descripcion}}</td>
         <td>
-            <button name="editar">Editar</button>
-            <button name="borrar">Borrar</button>
+            <button formnovalidate name="editar" value="{{ feature.id }}">Editar</button>
+            <button formnovalidate name="borrar" value="{{ feature.id }}" >Borrar</button>
         </td>
+        {% endif %}
     </tr>
     {% endfor %}
     </table>
