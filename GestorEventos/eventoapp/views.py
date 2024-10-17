@@ -1,49 +1,52 @@
-from django.shortcuts import render # type: ignore
-from django.http import HttpResponse  # type: ignore
+from django.shortcuts import render
+from django.http import JsonResponse 
+from .serializers import FeatureSerializer
 from .models import Feature
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 
-from .forms import FeatureForm
 # Create your views here.
 
 def index(request):
-    context = {}
-    formulario = FeatureForm()
-    features = Feature.objects.all()
-
-    context['features'] = features
-
-    if request.method == 'POST':
-        if 'guardar' in request.POST:
-            identificador = request.POST.get('guardar')
-            
-            if not identificador:
-                formulario = FeatureForm(request.POST)
-                
-            else:
-                feature = Feature.objects.get(id=identificador)
-                formulario = FeatureForm(request.POST, instance=feature)
-                
-
-            formulario.save()
-            formulario = FeatureForm()
-
-        elif 'borrar' in request.POST:
-            identificador = request.POST.get('borrar')
-            feature = Feature.objects.get(id=identificador)
-            feature.delete()
-
-        elif 'editar' in request.POST:
-            identificador = request.POST.get('editar')
-            feature = Feature.objects.get(id=identificador)
-
-            formulario = FeatureForm(instance=feature)
-
-    context['formulario'] = formulario
 
     return render(request, 'index.html', context)
 
-def contador(request):
 
-    palabras = request.POST['text'].split()
-    cantidadPalabras = len(palabras)
-    return render(request, 'contador.html', {"cantidad": cantidadPalabras})
+@api_view(["GET", "POST"])
+def listaFeatures(request, format=None):
+    
+    if request.method == "GET":
+        features = Feature.objects.all()
+        serializer = FeatureSerializer(features, many=True)
+        return Response(serializer.data)
+    
+    if request.method == "POST":
+        serializer = FeatureSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status= status.HTTP_201_CREATED)
+
+@api_view(["GET","PUT","DELETE"])
+def detalleFeature(request, id, format=None):
+    
+    try:
+        feature = Feature.objects.get(pk=id)                                              
+    except Feature.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "GET":
+        serializer = FeatureSerializer(feature)
+        return Response(serializer.data)
+    
+    if request.method == "PUT":
+        serializer = FeatureSerializer(feature, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+    
+    if request.method == "DELETE":
+        feature.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

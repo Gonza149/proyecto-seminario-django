@@ -7,7 +7,7 @@ class Feature(models.Model):
     descripcion = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"{self.nombre}"    
+        return self.nombre    
 
 class Lugar(models.Model):
     nombre  = models.CharField(max_length=50)
@@ -16,19 +16,20 @@ class Lugar(models.Model):
     detalleLugar = models.CharField(max_length=200, null=True)
 
     def __str__(self):
-        return f"{self.nombre}"
+        return self.nombre
 
 class TipoEvento(models.Model):
     nombre = models.CharField(max_length=20)
 
     def __str__(self):
-        return f"{self.nombre}"
+        return self.nombre
 
 class Evento(models.Model):
     nombre = models.CharField(max_length=100)
     fechaEvento = models.DateField()
     ubicacion = models.ForeignKey(Lugar, on_delete=models.CASCADE)
     tipoEvento = models.ForeignKey(TipoEvento, null=True, on_delete=models.CASCADE)
+    imagen = models.ImageField(null=True, blank=True, upload_to="images/")
 
     def __str__(self):
-        return f"{self.nombre} - {self.ubicacion}"
+        return self.nombre + '-' + self.ubicacion
