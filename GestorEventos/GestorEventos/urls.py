@@ -23,7 +23,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('eventoapp.urls')),
     path('features/', views.listaFeatures),
-    path('features/<int:id>', views.detalleFeature)
+    path('features/<int:id>', views.detalleFeature),
+    path('tipoeventos/', views.listaTipoEventos),
+    path('lugares/', views.listaLugares)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

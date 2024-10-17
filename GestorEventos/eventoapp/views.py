@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse 
-from .serializers import FeatureSerializer
-from .models import Feature
+from .serializers import FeatureSerializer, TipoEventoSerializer
+from .models import Feature, TipoEvento
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -50,3 +50,25 @@ def detalleFeature(request, id, format=None):
     if request.method == "DELETE":
         feature.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+@api_view(["GET","POST"])
+def listaTipoEventos(request, format=None):
+
+    if request.method == "GET":
+        tipoeventos = TipoEvento.objects.all()
+        serializer = TipoEventoSerializer(tipoeventos, many=True)
+        return Response(serializer.data)
+    
+    if request.method == "POST":
+        serializer = TipoEventoSerializer(request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status= status.HTTP_201_CREATED)
+        
+@api_view(["GET", "POST"])
+def listaLugares(request, format=None):
+
+    if request.method == "GET":
+        pass
