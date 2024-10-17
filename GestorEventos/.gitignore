@@ -1,6 +1,7 @@
 *.log
 *.pot
 *.pyc
-__pycache__/
+__pycache__
+eventoapp/migrations
 local_settings.py
 media
