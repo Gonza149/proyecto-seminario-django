@@ -29,7 +29,6 @@ class Evento(models.Model):
     fechaEvento = models.DateField()
     ubicacion = models.ForeignKey(Lugar, null=True, on_delete=models.CASCADE)
     tipoEvento = models.ForeignKey(TipoEvento, null=True, on_delete=models.CASCADE)
-    imagen = models.ImageField(null=True, blank=True, upload_to="images/")
 
     def __str__(self):
-        return self.nombre + '-' + self.ubicacion
+        return self.nombre + '-' + self.ubicacion.nombre
